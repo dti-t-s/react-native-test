@@ -7,25 +7,28 @@
  */
 
 import React, { Component } from 'react';
-import { Text, TextInput, View, Settings, Button } from 'react-native';
+import { Text, View, Share, Button } from 'react-native';
 
 export default class App extends Component {
   constructor(){
     super()
     this.state = {
-      hoge: '',
-      fuga: ''
+      position: {},
     }
   }
-  componentWillMount() {
-    const hoge = Settings.get('hoge');
-    const fuga = Settings.get('fuga');
+  openShare() {
+    Share.share({
+      title: 'タイトル',
+      message: '概要'
+    }, {}).then((result, activityType) => {
+      if (result.action == Share.dismissedAction) {
+        
+      } else if(result.action == Share.sharedAction){
+        
+      } else {
 
-    this.setState({hoge: hoge ? hoge : '', fuga: fuga ? fuga : ''})
-  }
-  changeSettings(){
-    const { hoge, fuga } = this.state
-    Settings.set({hoge: hoge, fuga: fuga})
+      }
+    });
   }
 
   render() {
@@ -36,31 +39,9 @@ export default class App extends Component {
         alignItems: 'center',
         backgroundColor: 'F5FCFF',
       }}>
-        <Text>{'hoge:' + this.state.hoge}</Text>
-        <Text>{'fuga:' + this.state.fuga}</Text>
-        <TextInput
-          style={{
-            width: '100%',
-            textAlign: 'center',
-            borderBottomWidth: 1,
-            borderColor: '#ccc'
-          }}
-          value={this.state.hoge}
-          onChangeText={hoge => this.setState({hoge})}
-        />
-        <TextInput
-          style={{
-            width: '100%',
-            textAlign: 'center',
-            borderBottomWidth: 1,
-            borderColor: '#ccc'
-          }}
-          value={this.state.fuga}
-          onChangeText={fuga => this.setState({fuga})}
-        />
+        
         <Button
-          onPress={()=>{this.changeSettings()}}
-          title="設定を変更"
+          onPress={()=>this.openShare()} title={'シェアを開く'}
         />
       </View>
     );
