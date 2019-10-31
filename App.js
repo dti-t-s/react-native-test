@@ -7,28 +7,24 @@
  */
 
 import React, { Component } from 'react';
-import { Text, View, Share, Button } from 'react-native';
+import { Text, View, Share, Button, StyleSheet, TextInput, Clipboard } from 'react-native';
 
 export default class App extends Component {
   constructor(){
     super()
     this.state = {
-      position: {},
+      input: "",
+      text: ""
     }
   }
-  openShare() {
-    Share.share({
-      title: 'タイトル',
-      message: '概要'
-    }, {}).then((result, activityType) => {
-      if (result.action == Share.dismissedAction) {
-        
-      } else if(result.action == Share.sharedAction){
-        
-      } else {
+  pbcopy() {
+    const { input } = this.state
+    Clipboard.setString(input)
+  }
 
-      }
-    });
+  async getpb() {
+    const text = await Clipboard.getString()
+    this.setState({text})
   }
 
   render() {
@@ -39,9 +35,22 @@ export default class App extends Component {
         alignItems: 'center',
         backgroundColor: 'F5FCFF',
       }}>
-        
+        <TextInput
+          style={{
+            width: '100%',
+            textAlign: 'center',
+            borderBottomWidth: 1,
+            borderColor: '#ccc'
+          }}
+          value={this.state.input}
+          onChangeText={input =>this.setState({input})}
+        />
         <Button
-          onPress={()=>this.openShare()} title={'シェアを開く'}
+          onPress={()=>this.pbcopy()} title="save to Clipboed"
+        />
+        <Text>{this.state.text}</Text>
+        <Button
+          onPress={()=>this.getpb()} title="get from Clipboed"
         />
       </View>
     );
